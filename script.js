@@ -30,8 +30,8 @@ function startGame()
         for(let c = 0; c < cols; c++)
         {
             let tile = document.createElement("img");
-            tile.id = r.toString() + "-" + c.toString(); //img-id == 0-0
-            tile.src = "./images/" + randomCandy() + ".png";//img-src = ./images/Blue.png
+            tile.id = r.toString() + "-" + c.toString();        //img-id == 0-0
+            tile.src = "./images/" + randomCandy() + ".png";    //img-src = ./images/Blue.png
 
             tile.addEventListener("dragstart", dragStart);
             tile.addEventListener("dragenter", dragEnter);
@@ -46,7 +46,6 @@ function startGame()
         }
         board.push(row);
     }
-    console.log(board);
 }
 
 function dragStart()
@@ -104,7 +103,6 @@ function dragEnd()
         let trgImg = trgTile.src;
         currTile.src = trgImg;
         trgTile.src = currImg;
-        // console.log("working");
         let validMove = checkValid();
         if(!validMove)
         {
@@ -140,9 +138,8 @@ function crushFive()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && candy4.src == candy5.src && !candy1.src.includes("blank"))
             {
-                createChoco(r,c+2);
-                candy2.src = candy1.src = candy4.src = candy5.src = "./images/blank.png";
-                score += 50;
+                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./candy-crush/images/blank.png";
+                score += 100;
             }
         }
     }
@@ -159,9 +156,8 @@ function crushFive()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && candy4.src == candy5.src && !candy1.src.includes("blank"))
             {
-                createChoco(r+2,c);
-                candy2.src = candy1.src = candy4.src = candy5.src = "./images/blank.png";
-                score += 50;
+                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./candy-crush/images/blank.png";
+                score += 100;
             }
         }
     }
@@ -180,9 +176,8 @@ function crushFour()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && !candy1.src.includes("blank"))
             {
-                createStriped(r, c+1, "Horizontal");
-                candy1.src = candy4.src = candy3.src = "./images/blank.png";
-                score += 40;
+                candy1.src = candy2.src = candy3.src = candy4.src = "./candy-crush/images/blank.png";
+                score += 60;
             }
         }
     }
@@ -198,9 +193,8 @@ function crushFour()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && !candy1.src.includes("blank"))
             {
-                createStriped(r+1, c, "Vertical");
-                candy1.src = candy4.src = candy3.src = "./images/blank.png";
-                score += 40;
+                candy1.src = candy2.src = candy3.src = candy4.src = "./candy-crush/images/blank.png";
+                score += 60;
             }
         }
     }
@@ -214,19 +208,16 @@ function crushLShape()
         {
             let candy = board[r][c];
             if(candy.src.includes("blank")) continue;
-            //deleted and stored in backup.txt
 
             if(checkL(r,c,[0,0], [1,0], [2,0], [2,1], [2,2]))
             {
-                createWrapped(r+2, c);
-                clearLShape(r,c,[[0,0], [1,0], [2,1], [2,2]], [1,1]);
-                score += 45;
+                clearLShape(r,c,[[0,0], [1,0], [2,0], [2,1], [2,2]]);
+                score += 75;
             }
             else if(checkL(r,c,[0,0], [0,1], [0,2], [1,2], [2,2]))
             {
-                createWrapped(r, c+2);
-                clearLShape(r,c,[[0,0], [0,1], [1,2], [2,2]], [1,1]);
-                score += 45;
+                clearLShape(r,c,[[0,0], [0,1], [0,2], [1,2], [2,2]]);
+                score += 75;
             }
         }
     }
@@ -239,25 +230,21 @@ function crushLShape()
 
             if(checkL(r,c,[0,0], [0,-1], [0,-2], [1,-2], [2,-2]))
             {
-                createWrapped(r, c-2);
-                clearLShape(r,c,[[0,0], [0,-1], [1,-2], [2,-2]], [1,-1]);
-                score += 45;
+                clearLShape(r,c,[[0,0], [0,-1], [0,-2], [1,-2], [2,-2]]);
+                score += 75;
             }
             else if(checkL(r,c,[0,0], [1,0], [2,0], [2,-1], [2,-2]))
             {
-                createWrapped(r+2, c);
-                clearLShape(r,c,[[0,0], [1,0], [2,-1], [2,-2]], [1,-1]);
-                score += 45;
+                clearLShape(r,c,[[0,0], [1,0], [2,0], [2,-1], [2,-2]]);
+                score += 75;
             }
         }
     }
 }
 
-function clearLShape(r, c, coords, except) {
+function clearLShape(r, c, coords) {
     coords.forEach(([dr, dc]) => {
-        if (dr !== except[0] || dc !== except[1]) {
-            board[r+dr][c+dc].src = "./images/blank.png";
-        }
+        board[r+dr][c+dc].src = "./images/blank.png";
     });
 }
 
@@ -282,15 +269,13 @@ function crushTShape()
 
             if(checkTShape(r,c, [[0,0],[0,1],[0,2],[1,1],[2,1]]))
             {
-                createWrapped(r+2, c+1);
-                clearTShape(r, c, [[0,0],[0,1],[0,2],[1,1],[2,1]], [2,1]);
-                score += 45;
+                clearTShape(r, c, [[0,0],[0,1],[0,2],[1,1],[2,1]]);
+                score += 75;
             }
             else if(checkTShape(r,c, [[0,0],[1,0],[2,0],[1,1],[1,2]]))
             {
-                createWrapped(r+2, c);
-                clearTShape(r, c, [[0,0],[1,0],[2,0],[1,1],[1,2]], [2,0]);
-                score += 45;
+                clearTShape(r, c, [[0,0],[1,0],[2,0],[1,1],[1,2]]);
+                score += 75;
             }
         }
     }
@@ -303,26 +288,22 @@ function crushTShape()
 
             if(checkTShape(r,c, [[0,0],[0,-1],[0,-2],[-1,-1],[-2,-1]]))
             {
-                createWrapped(r, c-1);
-                clearTShape(r,c, [[0,0],[0,-1],[0,-2],[-1,-1],[-2,-1]], [0,-1]);
-                score += 45;
+                clearTShape(r,c, [[0,0],[0,-1],[0,-2],[-1,-1],[-2,-1]]);
+                score += 75;
             }
             else if(checkTShape(r,c, [[0,0],[-1,0],[-2,0],[-1,-1],[-1,-2]]))
             {
-                createWrapped(r,c);
-                clearTShape(r,c, [[0,0],[-1,0],[-2,0],[-1,-1],[-1,-2]], [0,0]);
-                score += 45;
+                clearTShape(r,c, [[0,0],[-1,0],[-2,0],[-1,-1],[-1,-2]]);
+                score += 75;
             }
         }
     }
 }
 
-function clearTShape(r, c, coords, except)
+function clearTShape(r, c, coords)
 {
     coords.forEach(([dr, dc]) => {
-        if (dr !== except[0] || dc !== except[1]) {
-            board[r+dr][c+dc].src = "./images/blank.png";
-        }
+        board[r+dr][c+dc].src = "./images/blank.png";
     });
 }
 
@@ -333,25 +314,6 @@ function checkTShape(r, c, coords) {
         c+dc>=0 && c+dc < cols && 
         board[r+dr][c+dc].src === candy.src
     );
-}
-
-function createChoco(row, col) 
-{
-    board[row][col].src = "./images/Choco.png";
-}
-
-function createStriped(row, col, direction) 
-{
-    let candyColor = board[row][col].src.split("/").pop().split(".")[0];
-    console.log(candyColor);
-    board[row][col].src = `./images/${candyColor}-Striped-${direction}.png`;
-}
-
-function createWrapped(row, col)
-{
-    let candyColor = board[row][col].src.split("/").pop().split(".")[0];
-    console.log(candyColor);
-    board[row][col].src = `./images/${candyColor}-Wrapped.png`;
 }
 
 function crushThree()
