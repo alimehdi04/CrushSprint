@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crush Sprint</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Quicksand:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Score <span id="score">0</span></h1>
-    <div id="board"></div>
+    <div id="landing-page">
+        <h1 id="title">Crush Sprint</h1>
+        <h3 id="tagline">Score as high as you can in a limited number of moves!</h3>
+        <button id="start-btn">Start Game</button>
+    </div>
+    <div id="game-container" style="display: none;">
+        <div id="game-stats">
+            <h1 class="display">Score <span id="score">0</span></h1>
+            <h2 class="display">Moves Left: <span id="moves">30</span></h2>
+        </div>
+        <div id="board"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

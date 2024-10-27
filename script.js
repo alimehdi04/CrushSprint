@@ -2,20 +2,31 @@ let board = [];
 const candies = ["Red", "Orange", "Blue", "Green", "Yellow", "Purple"];
 const rows = 9;
 const cols = 9;
+let isGameStarted = false;
 let score = 0;
+
+let movesLeft = 30;
 
 let currTile;
 let trgTile;
 
-window.onload = function(){
-    startGame();
-
-    window.setInterval(function(){
-        crushCandy();
-        slideCandy();
-        generateCandy();
-    },100)
-}
+document.getElementById("start-btn").addEventListener("click", function() {
+    document.getElementById("landing-page").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
+    
+    if (!isGameStarted) {
+        document.body.classList.add('landing-active');
+        score = 0;
+        movesLeft = 30;
+        startGame();
+        isGameStarted = true;
+        window.setInterval(function() {
+            crushCandy();
+            slideCandy();
+            generateCandy();
+        }, 100);
+    }
+});
 
 function randomCandy()
 {
@@ -24,14 +35,20 @@ function randomCandy()
 
 function startGame()
 {
+    document.getElementById("board").innerHTML = ""; // This will remove all the existing candy images
+    board = [];
+
+    document.body.classList.remove('landing-active');
+    document.body.classList.add('game-active');
+
     for(let r = 0; r < rows; r++)
     {
         let row = [];
         for(let c = 0; c < cols; c++)
         {
             let tile = document.createElement("img");
-            tile.id = r.toString() + "-" + c.toString();        //img-id == 0-0
-            tile.src = "./images/" + randomCandy() + ".png";    //img-src = ./images/Blue.png
+            tile.id = r.toString() + "-" + c.toString(); //img-id == 0-0
+            tile.src = "./images/" + randomCandy() + ".png";//img-src = ./images/Blue.png
 
             tile.addEventListener("dragstart", dragStart);
             tile.addEventListener("dragenter", dragEnter);
@@ -46,6 +63,7 @@ function startGame()
         }
         board.push(row);
     }
+    console.log(board);
 }
 
 function dragStart()
@@ -111,6 +129,14 @@ function dragEnd()
             currTile.src = trgImg;
             trgTile.src = currImg;
         }
+        else
+        {
+            if (movesLeft === 0) {
+                endGame();
+            }
+            movesLeft--;
+            document.getElementById("moves").innerText = movesLeft;
+        }
     }
 }
 
@@ -121,7 +147,9 @@ function crushCandy()
     crushTShape();
     crushFour();
     crushThree();
+    if(movesLeft == 30) score = 0;
     document.getElementById("score").innerText = score;
+    document.getElementById("moves").innerText = movesLeft;
 }
 
 function crushFive()
@@ -138,7 +166,7 @@ function crushFive()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && candy4.src == candy5.src && !candy1.src.includes("blank"))
             {
-                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./candy-crush/images/blank.png";
+                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./images/blank.png";
                 score += 100;
             }
         }
@@ -156,7 +184,7 @@ function crushFive()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && candy4.src == candy5.src && !candy1.src.includes("blank"))
             {
-                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./candy-crush/images/blank.png";
+                candy1.src = candy2.src = candy3.src = candy4.src = candy5.src = "./images/blank.png";
                 score += 100;
             }
         }
@@ -176,7 +204,7 @@ function crushFour()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && !candy1.src.includes("blank"))
             {
-                candy1.src = candy2.src = candy3.src = candy4.src = "./candy-crush/images/blank.png";
+                candy1.src = candy2.src = candy3.src = candy4.src = "./images/blank.png";
                 score += 60;
             }
         }
@@ -193,7 +221,7 @@ function crushFour()
 
             if(candy1.src==candy2.src && candy2.src == candy3.src && candy3.src == candy4.src && !candy1.src.includes("blank"))
             {
-                candy1.src = candy2.src = candy3.src = candy4.src = "./candy-crush/images/blank.png";
+                candy1.src = candy2.src = candy3.src = candy4.src = "./images/blank.png";
                 score += 60;
             }
         }
@@ -269,11 +297,13 @@ function crushTShape()
 
             if(checkTShape(r,c, [[0,0],[0,1],[0,2],[1,1],[2,1]]))
             {
+
                 clearTShape(r, c, [[0,0],[0,1],[0,2],[1,1],[2,1]]);
                 score += 75;
             }
             else if(checkTShape(r,c, [[0,0],[1,0],[2,0],[1,1],[1,2]]))
             {
+
                 clearTShape(r, c, [[0,0],[1,0],[2,0],[1,1],[1,2]]);
                 score += 75;
             }
@@ -303,7 +333,7 @@ function crushTShape()
 function clearTShape(r, c, coords)
 {
     coords.forEach(([dr, dc]) => {
-        board[r+dr][c+dc].src = "./images/blank.png";
+            board[r+dr][c+dc].src = "./images/blank.png";
     });
 }
 
@@ -415,7 +445,13 @@ function generateCandy()
         if(board[0][c].src.includes("blank"))
         {
             board[0][c].src = "./images/" + randomCandy() + ".png";
-
         }
     }
+}
+function endGame() 
+{
+    alert("Game Over! Your score is: " + score);    
+    isGameStarted = false;
+    document.getElementById("game-container").style.display = "none";
+    document.getElementById("landing-page").style.display = "block";
 }

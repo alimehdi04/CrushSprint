@@ -1,21 +1,120 @@
-body{
-    background : url(./background.jpg) no-repeat center center fixed;
+body {
+    background: url(./background.jpg) no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     text-align: center;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-#board{
+
+#landing-page {
+    height: 70vh;
+    width: 90%;
+    max-width: 600px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.15);
+    text-align: center;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+#title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    color: #A50EC0;
+    margin: 2rem 0 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+}
+
+#tagline {
+    font-family: 'Quicksand', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-weight: 500;
+    color: #F7AD00;
+    margin: 0 0 2rem;
+    letter-spacing: 1px;
+}
+
+#start-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.25rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    background-color: #ff4500;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+    transition: all 0.3s ease;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 69, 0, 0.6);
+    background-color: #ff5722;
+}
+
+#game-container {
+    width: 90%;
+    max-width: 800px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;     
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    margin: 0 auto; 
+}
+
+.display{
+    color: #F7AD00;
+}
+
+#board {
     width: 450px;
-    height:450px;
+    height: 450px;
     background-color: lightblue;
     border: 5px solid slategrey;
     border-radius: 10px;
-    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+
 }
-#board img{
+
+#board img {
     width: 50px;
     height: 50px;
+}
+
+.game-active #landing-page {
+    display: none;
+}
+
+.landing-active #board {
+    display: none;
+}
+
+#game-container, #landing-page {
+    transition: all 0.3s ease-in-out;
 }
