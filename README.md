@@ -3,6 +3,10 @@
 
 **Crush Sprint** is a fast-paced puzzle game where players aim to score as high as possible within a limited number of moves. The game challenges your strategic thinking and rewards you for creating powerful combos and chain reactions. 
 
+## Play Online
+
+You can also play **Crush Sprint** online at [https://crushsprintlive.tiiny.site/](https://crushsprintlive.tiiny.site/).
+
 ## Features
 
 - Match colorful candies to score points
