@@ -118,3 +118,34 @@ body {
 #game-container, #landing-page {
     transition: all 0.3s ease-in-out;
 }
+
+@media (max-width: 426px) {
+    #board {
+        max-width: 280px;
+        max-height: 280px;
+    }
+
+    #board img {
+        width: 11.11%;
+        height: 11.11%;
+    }
+
+    #landing-page, #game-container {
+        padding: 1rem;
+    }
+
+    #title {
+        font-size: clamp(1.8rem, 5vw, 2.3rem);
+        margin: 1.5rem 0 1rem;
+    }
+
+    #tagline {
+        font-size: clamp(0.8rem, 2.5vw, 1rem);
+    }
+
+    #start-btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+    }
+}
