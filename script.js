@@ -4,11 +4,12 @@ const rows = 9;
 const cols = 9;
 let isGameStarted = false;
 let score = 0;
-
 let movesLeft = 30;
 
 let currTile;
 let trgTile;
+let touchStartX;
+let touchStartY;
 
 document.getElementById("start-btn").addEventListener("click", function() {
     document.getElementById("landing-page").style.display = "none";
@@ -48,7 +49,7 @@ function startGame()
         {
             let tile = document.createElement("img");
             tile.id = r.toString() + "-" + c.toString(); //img-id == 0-0
-            tile.src = "./images/" + randomCandy() + ".png";//img-src = ./images/Blue.png
+            tile.src = "./images/" + randomCandy() + ".png";
 
             tile.addEventListener("dragstart", dragStart);
             tile.addEventListener("dragenter", dragEnter);
@@ -57,13 +58,102 @@ function startGame()
             tile.addEventListener("dragend", dragEnd);
             tile.addEventListener("drop", dragDrop);
 
-            
+            tile.addEventListener("touchstart", handleTouchStart, false);
+            tile.addEventListener("touchmove", handleTouchMove, false);
+            tile.addEventListener("touchend", handleTouchEnd, false);
+
             document.getElementById("board").append(tile);
             row.push(tile);
         }
         board.push(row);
     }
     console.log(board);
+}
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    currTile = this;
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+}
+function handleTouchMove(e) {
+    e.preventDefault();
+}
+function handleTouchEnd(e) {
+    e.preventDefault();
+    if (!currTile) return;
+
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    
+    let currCoords = currTile.id.split("-");
+    let r1 = parseInt(currCoords[0]);
+    let c1 = parseInt(currCoords[1]);
+    
+    let r2 = r1;
+    let c2 = c1;
+    
+    const minSwipeDistance = 30;
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (Math.abs(deltaX) > minSwipeDistance) {
+            c2 = deltaX > 0 ? c1 + 1 : c1 - 1;
+        }
+    } else {
+        if (Math.abs(deltaY) > minSwipeDistance) {
+            r2 = deltaY > 0 ? r1 + 1 : r1 - 1;
+        }
+    }
+    
+    if (r2 >= 0 && r2 < rows && c2 >= 0 && c2 < cols) {
+        trgTile = board[r2][c2];
+        swapTiles();
+    }
+    
+    currTile = null;
+    touchStartX = null;
+    touchStartY = null;
+}
+function swapTiles() {
+    if (!currTile || !trgTile || currTile.src.includes("blank") || trgTile.src.includes("blank")) {
+        return;
+    }
+
+    let currCoords = currTile.id.split("-");
+    let r1 = parseInt(currCoords[0]);
+    let c1 = parseInt(currCoords[1]);
+
+    let trgCoords = trgTile.id.split("-");
+    let r2 = parseInt(trgCoords[0]);
+    let c2 = parseInt(trgCoords[1]);
+
+    let moveleft = c2 == c1-1 && r1 == r2;
+    let moveright = c2 == c1+1 && r1 == r2;
+    let moveup = r2 == r1-1 && c1 == c2;
+    let movedown = r2 == r1+1 && c1 == c2;
+
+    let isAdjacent = moveleft || moveright || moveup || movedown;
+
+    if (isAdjacent) {
+        let currImg = currTile.src;
+        let trgImg = trgTile.src;
+        currTile.src = trgImg;
+        trgTile.src = currImg;
+
+        let validMove = checkValid();
+        if (!validMove) {
+            currTile.src = currImg;
+            trgTile.src = trgImg;
+        } else {
+            if (movesLeft === 0) {
+                endGame();
+            }
+            movesLeft--;
+            document.getElementById("moves").innerText = movesLeft;
+        }
+    }
 }
 
 function dragStart()
@@ -121,6 +211,7 @@ function dragEnd()
         let trgImg = trgTile.src;
         currTile.src = trgImg;
         trgTile.src = currImg;
+        // console.log("working");
         let validMove = checkValid();
         if(!validMove)
         {
@@ -445,6 +536,7 @@ function generateCandy()
         if(board[0][c].src.includes("blank"))
         {
             board[0][c].src = "./images/" + randomCandy() + ".png";
+
         }
     }
 }
